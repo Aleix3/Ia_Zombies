@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -38,6 +37,7 @@ public class EnemyWandering : MonoBehaviour
 
         // Dibujar el círculo y el frustum inicial
         DrawDetectionRadius();
+        DrawFrustum();
     }
 
     void Update()
@@ -54,7 +54,7 @@ public class EnemyWandering : MonoBehaviour
             }
         }
 
-        if(!founded)
+        if (!founded)
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
@@ -65,7 +65,6 @@ public class EnemyWandering : MonoBehaviour
                 }
             }
         }
-        
 
         // Actualizar el círculo y el frustum
         DrawDetectionRadius();
@@ -123,7 +122,7 @@ public class EnemyWandering : MonoBehaviour
         lineRenderer.SetPositions(positions);
     }
 
-    // Método para dibujar el frustum en frente del zombie desde una vista superior
+    // Método para dibujar el frustum en frente del enemigo desde una vista superior
     private void DrawFrustum()
     {
         Vector3[] frustumPositions = new Vector3[segments + 2];
@@ -133,10 +132,8 @@ public class EnemyWandering : MonoBehaviour
 
         // Calcular los límites del campo de visión
         float halfAngle = fieldOfViewAngle / 2;
-        Vector3 leftLimit = Quaternion.Euler(0, -halfAngle, 0) * transform.forward * visionDistance;
-        Vector3 rightLimit = Quaternion.Euler(0, halfAngle, 0) * transform.forward * visionDistance;
 
-        // Dibujar el arco
+        // Crear puntos para el arco del frustum
         for (int i = 0; i <= segments; i++)
         {
             float angle = Mathf.Lerp(-halfAngle, halfAngle, (float)i / segments);
@@ -155,8 +152,7 @@ public class EnemyWandering : MonoBehaviour
     // Método que se llama cuando el jugador es detectado
     private void OnPlayerDetected(Vector3 playerPosition)
     {
-        Debug.Log("siguiendo");// Aquí puedes implementar la lógica para que el zombi actúe al ser notificado
-         // Por ejemplo, seguir al jugador
+        Debug.Log("siguiendo"); // Aquí puedes implementar la lógica para que el zombi actúe al ser notificado
         founded = true;
     }
 
